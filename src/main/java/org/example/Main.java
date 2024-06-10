@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.IOException;
@@ -15,6 +16,8 @@ import java.io.IOException;
 import java.sql.*;
 import java.sql.Connection;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +33,23 @@ public class Main {
 
 
     public static void main(String[] args) throws InterruptedException, SQLException {
+        LocalDate currentDate = LocalDate.now();
+        // Создаем форматтер для вывода даты в нужном формате
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-
+        // Форматируем текущую дату
+        String formattedDate = currentDate.format(formatter);
         System.setProperty("webdriver.edge.driver", "D:\\WebDriver\\msedgedriver.exe");
-        String url = "https://xn----btbhgbpv1d7d.xn--80aswg/kupit-zhd-bilety/#/sochi/krasnodar";
-
-        WebDriver driver = new EdgeDriver();
+        String url = "https://xn----btbhgbpv1d7d.xn--80aswg/kupit-zhd-bilety/#/sochi/krasnodar?date="+formattedDate;
+        EdgeOptions options = new EdgeOptions();
+        options.addArguments("--headless");
+        options.addArguments("--disable-gpu");
+        WebDriver driver = new EdgeDriver(options);
         driver.get(url);
-        Duration duration = Duration.ofSeconds(10);
-        Thread.sleep(1200);
+        Duration duration = Duration.ofSeconds(20);
+        WebDriverWait wait = new WebDriverWait(driver, duration); // Устанавливаем таймаут 20 секунд
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("wg-train-container"))); // Указываем класс элемента
+        Thread.sleep(100);
         String pageSource = driver.getPageSource();
         Document document = Jsoup.parse(pageSource);
         Elements trainNumElem = document.select("span.wg-train-info__number-link");
@@ -62,6 +73,7 @@ public class Main {
             trainDurations.add(trainDuration);
         }
         printTrain();
+        driver.quit();
     }
 
 
