@@ -66,39 +66,4 @@ public class Main {
 
 
 
-    static void dbWrite(Train train) throws SQLException {
-        String sql = "INSERT INTO public.train(" + "train_id,train_duration,train_start,train_end)" + "VALUES (?, ?, ?, ?);";
-        connect = database.connectDb();
-        prepare = connect.prepareStatement(sql);
-        prepare.setString(1,train.getNumber());
-        prepare.setString(2,train.getDuration());
-        prepare.setString(3,train.getStartDate());
-        prepare.setString(4, train.getEndDate());
-
-
-        prepare.executeUpdate();
-
-    }
-
-    static void printTrain() throws SQLException {
-        Integer j=0;
-        for(int i =0; i<trainNumbers.size(); i++)
-        {
-            Train train = new Train();
-            train.setNumber(trainNumbers.get(i));
-            train.setDuration(trainDurations.get(i));
-            train.setStartDate(trainDates.get(j));
-            train.setEndDate(trainDates.get(j+1));
-            System.out.println("Номер поезда: "+train.getNumber());
-            System.out.println(train.getStartDate()+"------"+train.getDuration()+"------"+train.getEndDate());
-            System.out.println();
-            j+=2;
-            dbWrite(train);
-
-
-        }
-
-    }
-
-
 }
