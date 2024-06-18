@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Trains</title>
+</head>
+<body>
+<h1>Trains</h1>
+
+<form th:action="@{/executeQuery}" method="post">
+    <label for="sqlQuery">SQL Query:</label>
+    <input type="text" id="sqlQuery" name="sqlQuery"/>
+    <button type="submit">Execute</button>
+</form>
+
+<table border="1">
+    <tr>
+        <th>Train ID</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Duration</th>
+    </tr>
+    <tr th:each="train : ${trains}">
+        <td th:text="${train.trainId}"></td>
+        <td th:text="${train.trainStart}"></td>
+        <td th:text="${train.trainEnd}"></td>
+        <td th:text="${train.trainDuration}"></td>
+    </tr>
+</table>
+</body>
+</html>
+

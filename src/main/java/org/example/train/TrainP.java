@@ -1,9 +1,9 @@
-package org.example;
+package org.example.train;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class Train {
+public class TrainP {
     @Setter
     @Getter
     String number;
