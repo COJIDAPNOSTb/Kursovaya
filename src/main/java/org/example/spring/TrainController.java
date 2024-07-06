@@ -26,8 +26,7 @@ public class TrainController {
     }
   @PostMapping("/executeQuery")
   public String executeQuery(@RequestParam("sqlQuery") String sqlQuery, Model model) {
-     List<Map<String, Object>> trains = database.executeQuery(sqlQuery);
-      model.addAttribute("trains", trains);
+
     return "trains";
    }
 

@@ -50,7 +50,7 @@ public class Parcer {
 
                 String pageSource = driver.getPageSource();
                 Document document = Jsoup.parse(pageSource);
-                parseTrainData(document);
+                ParsingData.parseTrainData(document);
                 currentDate = currentDate.plusDays(1);
             }
 
@@ -60,26 +60,6 @@ public class Parcer {
         }
     }
 
-    private static void parseTrainData(Document document) {
-        Elements trainNumElem = document.select("span.wg-train-info__number-link");
-        Elements startDateElem = document.select("span.wg-track-info__date");
-        Elements durationElem = document.select("span.wg-track-info__duration-time");
-
-        for (var element : trainNumElem) {
-            String trainNumber = element.text();
-            if (trainNumber.length() <= 7) {
-                trainNumbers.add(trainNumber);
-            }
-        }
-
-        for (var element : startDateElem) {
-            trainDates.add(element.text());
-        }
-
-        for (var element : durationElem) {
-            trainDurations.add(element.text());
-        }
-    }
 
     private static void printAndWriteTrains() throws SQLException {
         int j = 0;
@@ -95,18 +75,9 @@ public class Parcer {
             System.out.println();
 
             j += 2;
-            dbWrite(trainP);
+            DatabaseWrite.dbWrite(trainP);
         }
     }
 
-    static void dbWrite(TrainP trainP) throws SQLException {
-        String sql = "INSERT INTO public.train (train_id, train_duration, train_start, train_end) VALUES (?, ?, ?, ?);";
-        try (Connection connect = database.connectDb(); PreparedStatement prepare = connect.prepareStatement(sql)) {
-            prepare.setString(1, trainP.getNumber());
-            prepare.setString(2, trainP.getDuration());
-            prepare.setString(3, trainP.getStartDate());
-            prepare.setString(4, trainP.getEndDate());
-            prepare.executeUpdate();
-        }
-    }
+
 }
